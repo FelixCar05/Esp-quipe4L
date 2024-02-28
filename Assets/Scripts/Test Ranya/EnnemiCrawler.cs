@@ -129,7 +129,7 @@ public class EnnemiCrawler : Entité //beaucoup du code ici se retrouve dans enne
     {
         if (other.CompareTag("Joueur"))
         {
-            QTEManager.Instance.StartQTE(gameObject);
+            //QTEManager.Instance.StartQTE(gameObject);
             animateur.SetBool("EnnemiZoneDattaque", true);
             NavAgent.isStopped = true;
         }
