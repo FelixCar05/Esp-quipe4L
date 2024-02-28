@@ -10,6 +10,9 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
+## Ajout pour le cours 420-204-RE Lionel Groulx
+/[Aa]ssets/Ignorer/*
+
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
