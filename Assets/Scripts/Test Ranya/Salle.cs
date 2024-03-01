@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Salle : MonoBehaviour
 {
-    public bool découverte; /*{ get; private set; }*/
+    public bool découverte{ get; private set; }
     public List<GameObject> listeEnnemisDansSalle{ get; private set; }
     
     void Start()

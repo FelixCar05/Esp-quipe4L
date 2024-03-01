@@ -82,15 +82,15 @@ public class GameManager : MonoBehaviour
                 // chercher chacune des porte dans la salle actuelle
                 if (sallesCourrantes.Count < nbrSalleLimite)
                 {
-                    //yield return new WaitForSeconds(0.1f);
-					yield return new WaitForSeconds(4f);
+                    yield return new WaitForSeconds(0.1f);
+					//yield return new WaitForSeconds(4f);
 					//StartCoroutine(PlacerSalle(ListeDesPortes[j], sallesCourrantes[i])); Version Officielle
 					//PlacerSalleTest(ListeDesPortes[j], sallesCourrantes[i]); test
 					StartCoroutine(PlacerSalle(ListeDesPortes[j], sallesCourrantes[i]));
                 }
             }
-            //yield return new WaitForSeconds(0.025f);
-			yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(0.025f);
+			//yield return new WaitForSeconds(3f);
 
 			// Une fois que toutes les portes ont une salle connectée on passe à la prochaine
 			i++;
@@ -154,8 +154,8 @@ public class GameManager : MonoBehaviour
                     //Changement de position pour fiter avec la salle
                     Vector3 bouger = porteSalleAPlacer.transform.position - porte.transform.position;
                     salleAplacer.transform.position -= bouger;
-                    //yield return new WaitForSeconds(0.025f);
-					yield return new WaitForSeconds(3f);
+                    yield return new WaitForSeconds(0.025f);
+					//yield return new WaitForSeconds(3f);
 					//StartCoroutine(Attendre(salleAPlacerSalleGen,sallePlacée));
 					// Regarder si la salle n<entre pas en collision avec d<autres salles
 					if (salleAPlacerSalleGen.EstPositionLibre(sallePlacée))

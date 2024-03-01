@@ -3,84 +3,83 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnnemiCrawler : Entité //beaucoup du code ici se retrouve dans ennemi, il faut modifier cette classe pour qu'elle herite d'ennemi.
+public class EnnemiCrawler : Ennemi //beaucoup du code ici se retrouve dans ennemi, il faut modifier cette classe pour qu'elle herite d'ennemi.
 {
-    // Start is called before the first frame update
-    Salle ScriptSalleMère;
-    GameObject Joueur;
-    Animator animateur;
-    NavMeshAgent NavAgent;
-    bool mort;
+    private Salle ScriptSalleMère;
+    private Animator animateur;
+    private float ptVieMax;
+    private bool mort;
+    private bool idle;
 
-    Vector3 DirectionBalleFinDeVie;
-    Transform PositionBalleDeFinVie;
-    Rigidbody[] rb;
-    [SerializeField]
-    ParticleSystem ExplosionSang;
-    [SerializeField]
-    ParticleSystem CouliSang;
 
-    void Start()
-    {
-        ScriptSalleMère = GetComponentInParent<Salle>();
-        Joueur = GameObject.FindGameObjectWithTag("Joueur");
-        animateur = GetComponent<Animator>();
-        NavAgent = GetComponent<NavMeshAgent>();
-        rb = GetComponentsInChildren<Rigidbody>();
-        mort = false;
-    }
+    [SerializeField]
+    GameObject TestFuiteEnnemi;
+    [SerializeField]
+    float vitesse4pattes;
+    [SerializeField]
+    float vitesseRamper;
 
     public EnnemiCrawler(float ptVie, float ptDégât) : base(ptVie, ptDégât)
     {
     }
+    void Start()
+    {
+        ScriptSalleMère = GetComponentInParent<Salle>();
+        animateur = GetComponent<Animator>();
+        NavAgent = GetComponent<NavMeshAgent>();
+        rb = GetComponentsInChildren<Rigidbody>();
+        mort = false;
+        ptVieMax = PtVie;
+        vitesseRamper = 3f;
+        vitesse4pattes = 6f;
+        animateur.SetBool("Idle", true);
+
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (ScriptSalleMère != null && ScriptSalleMère.découverte == true)
+        if (animateur.GetBool("Idle") && ScriptSalleMère != null && ScriptSalleMère.découverte == true)
         {
+            animateur.SetBool("Idle", false); //comme cela on ne reset pas le trigger indéfiniment pour rien une fois que le crawler se réveille
             animateur.SetTrigger("EnnemiDétecté");
-            animateur.SetInteger("NombreEnnemisDansSalle", ScriptSalleMère.listeEnnemisDansSalle.Count);
-            Debug.Log(animateur.GetInteger("NombreEnnemisDansSalle"));
-
-            if (!mort && (animateur.GetCurrentAnimatorStateInfo(0).IsName("Ramper")
-                || animateur.GetCurrentAnimatorStateInfo(0).IsName("Ramper4pattes")))
-            {
-                NavAgent.destination = Joueur.transform.position;
-            }
-
         }
+        animateur.SetInteger("NombreEnnemisDansSalle", ScriptSalleMère.listeEnnemisDansSalle.Count);
+
+        if (!mort)
+        {
+            if (animateur.GetCurrentAnimatorStateInfo(0).IsName("Ramper"))//pour qu'il ne commence à ramper que lordqu'il est en animation de déplacement
+            {
+                NavAgent.speed = vitesseRamper;
+                base.BougerNavMesh(joueur.transform.position);
+            }
+            else if (animateur.GetCurrentAnimatorStateInfo(0).IsName("Ramper4pattes"))
+            {
+                NavAgent.speed = vitesse4pattes;
+                base.BougerNavMesh(TestFuiteEnnemi.transform.position);
+            }
+        }
+        
 
     }
-    private void OnCollisionEnter(Collision collision)
+    protected override void OnCollisionEnter(Collision collision)
     {
+
+        Debug.Log(collision.gameObject.name);   
+
         if (collision.gameObject.CompareTag("Projectile"))
         {
-            //Destroy(collision.gameObject);
-            collision.gameObject.SetActive(false);
-            DirectionBalleFinDeVie = collision.gameObject.transform.forward.normalized;
-            PositionBalleDeFinVie = collision.gameObject.transform;
-            base.RecevoirDégât(2f); //commment avoir acces au pt degat de la classe
-            if (PtVie > 0)
-            {
-                if (ExplosionSang != null)
-                {
-                    Instantiate(ExplosionSang, collision.transform.position, Quaternion.Euler
-                    (collision.transform.rotation.x, -collision.transform.rotation.y, collision.transform.rotation.z));
-                }
-                if (CouliSang != null)
-                {
-                    Instantiate(CouliSang, collision.transform.position, Quaternion.Euler
-                   (collision.transform.rotation.x, -collision.transform.rotation.y, collision.transform.rotation.z));
-                }
-            }
-
+            base.OnCollisionEnter(collision);
             animateur.SetTrigger("Attaqué");
         }
 
-        if (collision.gameObject.CompareTag("Salle"))//RANYA MODIFY THIS
+        if (collision.gameObject.CompareTag("Salle"))
             animateur.SetInteger("NombreEnnemisDansSalle", ScriptSalleMère.listeEnnemisDansSalle.Count);
 
-    }// historique qui a avancé
+        
+            
+
+    }
 
     private void OnCollisionExit(Collision collision)
     {
@@ -91,49 +90,39 @@ public class EnnemiCrawler : Entité //beaucoup du code ici se retrouve dans enne
 
     protected override void Mourir()
     {
-        //déclancher une animation
         mort = true;
+        ScriptSalleMère.listeEnnemisDansSalle.Remove(gameObject);
         animateur.SetBool("Mort", true);
         NavAgent.enabled = false;
         base.Mourir();
-        Destroy(gameObject, 5f);
-        GetComponent<Ragdoll>().ActiverRagdoll();
-        TrouverRigidBodyPlusPrès(PositionBalleDeFinVie).AddForce(DirectionBalleFinDeVie * 750f, ForceMode.Impulse);
+        //Destroy(gameObject, 5f);
+        //GetComponent<Ragdoll>().ActiverRagdoll();
+        //TrouverRigidBodyPlusPrès(PositionBalleDeFinVie).AddForce(DirectionBalleFinDeVie * 750f, ForceMode.Impulse);
 
     }
-    private Rigidbody TrouverRigidBodyPlusPrès(Transform PositionBalleDeFinVie)
+    protected override Rigidbody TrouverRigidBodyPlusPrès(Transform PositionBalleDeFinVie)
     {
-        Rigidbody RigidbodyPlusPrès = rb[0];
-        float distancePlusPrès = Vector3.Distance(PositionBalleDeFinVie.position, rb[0].transform.position);
-
-
-        for (int i = 1; i < rb.Length; ++i)
-        {
-            float distance = Vector3.Distance(PositionBalleDeFinVie.position, rb[i].transform.position);
-
-            if (distance < distancePlusPrès)
-            {
-                distancePlusPrès = distance;
-                RigidbodyPlusPrès = rb[i];
-            }
-            if (distancePlusPrès <= .5f)
-            {
-                return RigidbodyPlusPrès;
-            }
-        }
-
-        return RigidbodyPlusPrès;
+        return base.TrouverRigidBodyPlusPrès(PositionBalleDeFinVie);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Joueur"))
         {
-            //QTEManager.Instance.StartQTE(gameObject);
             animateur.SetBool("EnnemiZoneDattaque", true);
             NavAgent.isStopped = true;
+
+            if (PtVie < (ptVieMax * 0.2) && Random.Range(1, 11) == 5)
+            {
+                QTEManager.Instance.StartQTE(gameObject);
+                animateur.SetBool("QTE", true);
+            }
+                
         }
-            
+        if (other.CompareTag("TestFuite")&& animateur.GetCurrentAnimatorStateInfo(0).IsName("Ramper4pattes"))
+        {
+            animateur.SetBool("Idle", true);//on ne va pas l'apercevoir tout de suite, puisque le crawler ne change pas reellement de salle (hypothethique)
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -142,6 +131,9 @@ public class EnnemiCrawler : Entité //beaucoup du code ici se retrouve dans enne
         {
             NavAgent.isStopped = false;
             animateur.SetBool("EnnemiZoneDattaque", false);
+            if(animateur.GetBool("QTE"))
+                Mourir();
+
         }
     }
 

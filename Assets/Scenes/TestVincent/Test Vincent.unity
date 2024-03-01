@@ -550,6 +550,22 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1000010346633862, guid: 9f4e5dd2165039f4a878d1c1260761df, type: 3}
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 6a8284a593c5c2a1020fb0c6f13b11a70e292d28
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000010346633862, guid: 9f4e5dd2165039f4a878d1c1260761df, type: 3}
+<<<<<<< HEAD
+>>>>>>> 6a8284a593c5c2a1020fb0c6f13b11a70e292d28
+=======
+>>>>>>> 6a8284a593c5c2a1020fb0c6f13b11a70e292d28
+=======
+>>>>>>> parent of 105a867 (revert)
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -971,6 +987,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: salle 1 portes #1
       objectReference: {fileID: 0}
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 6a8284a593c5c2a1020fb0c6f13b11a70e292d28
+    - target: {fileID: 6787821357106871450, guid: db4ef22af0da3c24a8937b4cf5603d0d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+<<<<<<< HEAD
+>>>>>>> 6a8284a593c5c2a1020fb0c6f13b11a70e292d28
+=======
+>>>>>>> 6a8284a593c5c2a1020fb0c6f13b11a70e292d28
+=======
+>>>>>>> parent of 105a867 (revert)
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3050,6 +3082,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: TimsAssets_Door
       objectReference: {fileID: 0}
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 6a8284a593c5c2a1020fb0c6f13b11a70e292d28
+    - target: {fileID: 1000010346633862, guid: 9f4e5dd2165039f4a878d1c1260761df, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+<<<<<<< HEAD
+>>>>>>> 6a8284a593c5c2a1020fb0c6f13b11a70e292d28
+=======
+>>>>>>> 6a8284a593c5c2a1020fb0c6f13b11a70e292d28
+=======
+>>>>>>> parent of 105a867 (revert)
     - target: {fileID: 4000013859883750, guid: 9f4e5dd2165039f4a878d1c1260761df, type: 3}
       propertyPath: m_LocalScale.x
       value: 3

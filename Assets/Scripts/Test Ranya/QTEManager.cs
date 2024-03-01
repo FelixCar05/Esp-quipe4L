@@ -22,7 +22,6 @@ public class QTEManager : MonoBehaviour
     private List<float> séquenceValide; //séquence déterminer à chaque association (en rotation)
     //private const float sliderTauxDescente = .001f; //valeur qui fait diminuer le slider selon un temps donné
     private CharacterController1 characterController; //le script character controller du joeur (c'est l'ancien, à mettre à jour)
-    private Animator animateurCrawler;
     private bool QTEActif = false;
 
     private void Awake()//pour le singleton!!!
@@ -34,7 +33,6 @@ public class QTEManager : MonoBehaviour
         else
         {
             instance = this;
-            Debug.Log("QTEManager est setté bb");
         }
     }
 
@@ -47,9 +45,8 @@ public class QTEManager : MonoBehaviour
     }
 
 
-    public void StartQTE(GameObject Crawler)
+    public void StartQTE(GameObject Ennemi)
     {
-        animateurCrawler = Crawler.GetComponent<Animator>();
         //sliderTemps.gameObject.SetActive(true);
         Debug.Log("lets goooo");
         QTEActif = true;
@@ -61,7 +58,6 @@ public class QTEManager : MonoBehaviour
     public void EndQTE()
     {
         // débloque les mouvements du personnage
-        animateurCrawler.SetTrigger("Attaqué");
         QTEActif = false;
         BoutonsEmptyObject.gameObject.SetActive(false);
         characterController.ChangerPeutMoveEtRotate(true);
@@ -161,7 +157,7 @@ public class QTEManager : MonoBehaviour
     private IEnumerator ÉchangerSpritesRoutine()
     {
         int indexSprite = 0;
-        while (true)// boucle infinie bb !!!
+        while (true)
         {
             yield return new WaitForSeconds(0.5f);
 
